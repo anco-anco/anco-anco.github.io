@@ -1,5 +1,5 @@
 <html>
- <script>
+<script>
 
 function getParam(p) {
 var match = RegExp('[?&]' + p + '=([^&]*)').exec(window.location.search);
@@ -18,7 +18,7 @@ expiryDate: expiryDate
 
 function addGclid() {
 var gclidParam = getParam('gclid');
-var gclidFormFields = ['gclid_field', 'foobar']; // all possible gclid form field ids here
+var gclidFormFields = ['gclid', 'GCLID_']; // all possible gclid form field ids here
 var gclidRecord = null;
 var currGclidFormField;
 
@@ -54,4 +54,3 @@ window.addEventListener('load', addGclid);
   <input type="text" id="gclid" name="lname"><br><br>
   <input type="submit" value="Submit">
 </form>
-

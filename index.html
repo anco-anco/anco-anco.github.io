@@ -1,15 +1,57 @@
 <html>
-  <script>
-    const url = window.location.search;
-    const urlParams = new URLSearchParams(url);
-    const gclid = urlParams.get('gclid');
-    document.getElementById('gclid').value = gclid;
+ <script>
+
+function getParam(p) {
+var match = RegExp('[?&]' + p + '=([^&]*)').exec(window.location.search);
+return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function getExpiryRecord(value) {
+var expiryPeriod = 90 * 24 * 60 * 60 * 1000; // 90 day expiry in milliseconds
+
+var expiryDate = new Date().getTime() + expiryPeriod;
+return {
+value: value,
+expiryDate: expiryDate
+};
+}
+
+function addGclid() {
+var gclidParam = getParam('gclid');
+var gclidFormFields = ['gclid_field', 'foobar']; // all possible gclid form field ids here
+var gclidRecord = null;
+var currGclidFormField;
+
+var gclsrcParam = getParam('gclsrc');
+var isGclsrcValid = !gclsrcParam || gclsrcParam.indexOf('aw') !== -1;
+
+gclidFormFields.forEach(function (field) {
+if (document.getElementById(field)) {
+currGclidFormField = document.getElementById(field);
+}
+});
+
+if (gclidParam && isGclsrcValid) {
+gclidRecord = getExpiryRecord(gclidParam);
+localStorage.setItem('gclid', JSON.stringify(gclidRecord));
+}
+
+var gclid = gclidRecord || JSON.parse(localStorage.getItem('gclid'));
+var isGclidValid = gclid && new Date().getTime() < gclid.expiryDate;
+
+if (currGclidFormField && isGclidValid) {
+currGclidFormField.value = gclid.value;
+}
+}
+
+window.addEventListener('load', addGclid);
+
 </script>
 <form action="/action_page.php">
   <label for="fname">First name:</label><br>
   <input type="text" id="fname" name="fname" value="John"><br>
   <label for="lname">Last name:</label><br>
-  <input type="text" id="gclid" name="lname" value="gclid"><br><br>
+  <input type="text" id="gclid" name="lname"><br><br>
   <input type="submit" value="Submit">
 </form>
 

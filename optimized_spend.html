@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@6.1.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7.0.2"></script>
+</head>
+<body>
+  <div id="vis"/>
+  <script>
+    const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "config": {
+    "axis": {
+      "labelColor": "#5F6368",
+      "labelFont": "Roboto",
+      "labelFontSize": 12,
+      "titleColor": "#5F6368",
+      "titleFont": "Roboto",
+      "titleFontSize": 12,
+      "titleFontWeight": "normal"
+    },
+    "view": {"continuousHeight": 300, "continuousWidth": 300, "stroke": null}
+  },
+  "data": {"name": "data-f60b7fc3b58270d4550faf88bbcfda12"},
+  "datasets": {
+    "data-f60b7fc3b58270d4550faf88bbcfda12": [
+      {"channel": "Display", "spend": -9100000},
+      {"channel": "Radio", "spend": -8700000},
+      {"channel": "Search", "spend": -6400000},
+      {"channel": "Newspaper", "spend": 13400000},
+      {"channel": "Social", "spend": 8900000},
+      {"channel": "Television", "spend": 1900000}
+    ]
+  },
+  "height": 400,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "condition": {"test": "(datum.spend > 0)", "value": "#4ECDE6"},
+          "value": "#F28B82"
+        },
+        "x": {
+          "axis": {
+            "domainColor": "#DADCE0",
+            "labelAngle": -45,
+            "labelPadding": 10,
+            "ticks": false,
+            "title": null
+          },
+          "field": "channel",
+          "scale": {"padding": 42},
+          "sort": null,
+          "type": "nominal"
+        },
+        "y": {
+          "axis": {
+            "domain": false,
+            "domainColor": "#DADCE0",
+            "labelExpr": "replace(format(datum.value, '.3~s'), 'G', 'B')",
+            "labelPadding": 10,
+            "ticks": false,
+            "title": "$",
+            "titleAlign": "left",
+            "titleAngle": 0,
+            "titleY": -20
+          },
+          "field": "spend",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "cornerRadiusEnd": 2,
+        "size": 42,
+        "tooltip": true,
+        "type": "bar"
+      },
+      "transform": [
+        {
+          "as": "text_value",
+          "calculate": "replace(format(datum.spend, '.2~s'), 'G', 'B')"
+        },
+        {"as": "text_y", "calculate": "datum.spend < 0 ? 0 : datum.spend"}
+      ]
+    },
+    {
+      "encoding": {
+        "text": {"field": "text_value", "type": "nominal"},
+        "x": {
+          "axis": {
+            "domainColor": "#DADCE0",
+            "labelAngle": -45,
+            "labelPadding": 10,
+            "ticks": false,
+            "title": null
+          },
+          "field": "channel",
+          "scale": {"padding": 42},
+          "sort": null,
+          "type": "nominal"
+        },
+        "y": {"field": "text_y", "type": "quantitative"}
+      },
+      "mark": {
+        "baseline": "top",
+        "color": "#3C4043",
+        "dy": -20,
+        "fontSize": 12,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "as": "text_value",
+          "calculate": "replace(format(datum.spend, '.2~s'), 'G', 'B')"
+        },
+        {"as": "text_y", "calculate": "datum.spend < 0 ? 0 : datum.spend"}
+      ]
+    }
+  ],
+  "title": {
+    "anchor": "start",
+    "color": "#3C4043",
+    "font": "Google Sans Display",
+    "fontSize": 18,
+    "fontWeight": "normal",
+    "offset": 10,
+    "text": "Change in optimized spend for each channel"
+  },
+  "width": 496
+};
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+</body>
+</html>
